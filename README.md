@@ -81,11 +81,46 @@ Phần base (chunking, vector store, agent RAG) **đã có sẵn và chạy đư
 ## Yêu cầu
 
 - **Kiến thức:** Python, RAG cơ bản (embedding, top-k retrieval). Chưa cần biết Neo4j hay Cypher; guide có hướng dẫn.
-- **Công cụ:** Python 3.11, Docker Desktop, Git, và API key của **ít nhất một provider**: OpenAI (chính), OpenRouter, Gemini hoặc Anthropic. Nếu chỉ dùng Anthropic cho chat, cần thêm OpenAI/OpenRouter/Gemini cho embedding vì Anthropic không có embedding API.
+- **Công cụ:** Python 3.11+, Docker Desktop, Git, và API key của **ít nhất một provider**: OpenAI, OpenRouter, Gemini, Anthropic hoặc Groq. Anthropic/Groq chỉ dùng cho chat; embedding có thể dùng OpenAI/OpenRouter/Gemini hoặc chọn `EMBEDDING_PROVIDER=local` như cấu hình bên dưới.
 - **Chi phí API:** khoảng **0,01–0,05 USD** cho mỗi lần chạy benchmark (`gpt-4o-mini`).
 - **Thời gian:** khoảng 5 giờ (setup 20', thiết kế ontology 40', code 2 giờ, benchmark và phân tích 1 giờ, báo cáo 40').
 
 ## Cấu trúc repo
+
+### Cấu hình Groq + embedding local của bài này
+
+`src/llm.py` hỗ trợ thêm Groq qua SDK OpenAI và embedding ONNX trên CPU.
+Cài `requirements.txt`, rồi đặt trong `.env` (không commit key):
+
+```dotenv
+GROQ_API_KEY=<key riêng của bạn>
+LLM_PROVIDER=groq
+GROQ_CHAT_MODEL=openai/gpt-oss-20b
+EMBEDDING_PROVIDER=local
+LOCAL_EMBEDDING_MODEL=sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+```
+
+Lần benchmark đầu tải model đa ngôn ngữ; các lần sau dùng cache. Embedding
+local là vector từ model thật, không dùng mock của test. Cả Flat và Graph dùng
+cùng model, chunk và top-k. USD chỉ tính API chat; `calls` còn bao gồm lượt
+embedding local. Retry 429 của Groq có giới hạn và tính thời gian chờ vào phép
+đo. Kết quả chạy thật và cách diễn giải ở `report/REPORT_KG.md`.
+
+So sánh bonus bằng ontology gợi ý (cùng provider, embedding, top-k và chunk):
+
+```bash
+python scripts/graph_snapshot.py save
+LAB_SOLUTION_PACKAGE=src_hint python bench_kg.py --judge --out ket_qua_benchmark_kg.hint.txt
+python scripts/graph_snapshot.py restore --replace
+```
+
+Các lệnh build/check/benchmark thay thế graph của lab. Snapshot lưu graph thật
+vào `.kg-backups/` (không commit); restore chỉ dùng snapshot đúng URI hiện tại.
+Groq dùng reasoning `low`, completion tối đa 4.096 token khi JSON và 1.536
+khi trả lời. Có thể đặt `LLM_TRACE_PATH=.kg-backups/trace.jsonl` để kiểm tra
+phản hồi API thật; log không lưu key hay header.
+
+### Các file chính
 
 ```
 ├── README.md             ← tổng quan (file này)
@@ -98,8 +133,8 @@ Phần base (chunking, vector store, agent RAG) **đã có sẵn và chạy đư
 │   ├── drug_news/        ← KB tin (1 file/bài) + sources.csv
 │   └── benchmark_kg.json ← 6 câu hỏi, đáp án chuẩn, từ khóa bắt buộc
 ├── src/
-│   ├── graph.py          ← ★ TODO KG-1..KG-4 + ontology gợi ý (HINT)
-│   ├── llm.py            ← OpenAI chính + OpenRouter/Gemini/Anthropic dự phòng, có đo token/USD/giây
+│   ├── graph.py          ← KG-1..KG-4, ontology custom và các hàm gợi ý HINT
+│   ├── llm.py            ← provider chat/embedding, gồm Groq + local; đo token/USD/giây
 │   └── chunking.py, store.py, agent.py, embeddings.py, models.py  ← base RAG (có sẵn)
 ├── scripts/
 │   ├── crawl_drug_corpus.py   ← crawl lại 2 KB

@@ -1,0 +1,85 @@
+{
+  "scope": "Incomplete real API run; not a complete benchmark and not a replacement for ket_qua_benchmark_kg.txt",
+  "date": "2026-10-06",
+  "source": "Opt-in API response trace from bench_kg.py --judge",
+  "stopped_at": "Q4 graph: Groq TPD 200000; Used 197731; Requested 3217; retry after 6m49.536s",
+  "rows": [
+    {
+      "question": "Q1",
+      "pipeline": "flat",
+      "input_tokens": 791,
+      "output_tokens": 39,
+      "answer": "Không đủ thông tin.",
+      "judge": {
+        "score": 0,
+        "reason": "The response \"Không đủ thông tin.\" does not provide the required definition of a precursor substance as stated in the standard answer. It fails to mention that a precursor is a chemical essential for the production of narcotics and is listed in the government-issued precursor list."
+      }
+    },
+    {
+      "question": "Q1",
+      "pipeline": "graph",
+      "input_tokens": 1809,
+      "output_tokens": 112,
+      "answer": "Tiền chất là **hóa chất không thể thiếu được trong quá trình điều chế, sản xuất chất ma túy** được quy định trong danh mục tiền chất do Chính phủ ban hành.",
+      "judge": {
+        "score": 2,
+        "reason": "The answer fully matches the standard answer, including all key points: definition of precursor, its necessity in drug manufacturing, and its regulation by the government."
+      }
+    },
+    {
+      "question": "Q2",
+      "pipeline": "flat",
+      "input_tokens": 831,
+      "output_tokens": 51,
+      "answer": "Những bị cáo lãnh án tử hình là **Trần Thanh Tuấn** và **Trần Minh Tâm**.",
+      "judge": {
+        "score": 2,
+        "reason": "The answer correctly identifies both defendants, Trần Thanh Tuấn and Trần Minh Tâm, who were sentenced to death, matching all key points of the standard answer."
+      }
+    },
+    {
+      "question": "Q2",
+      "pipeline": "graph",
+      "input_tokens": 2507,
+      "output_tokens": 93,
+      "answer": "Trong vụ đường dây mua bán hơn 36 kg ma túy được TAND TP.HCM xét xử ngày 28‑9, **hai bị cáo** bị lãnh án tử hình là:\n\n1. **Trần Thanh Tuấn** (25 tuổi)  \n2. **Trần Minh Tâm** (32 tuổi)",
+      "judge": {
+        "score": 2,
+        "reason": "The answer correctly lists both defendants, Trần Thanh Tuấn and Trần Minh Tâm, who were sentenced to death, matching all key points of the standard answer."
+      }
+    },
+    {
+      "question": "Q3",
+      "pipeline": "flat",
+      "input_tokens": 884,
+      "output_tokens": 49,
+      "answer": "Không đủ thông tin.",
+      "judge": {
+        "score": 0,
+        "reason": "The response \"Không đủ thông tin.\" does not provide any of the required details about the sentence, the charge, the legal provision, or the basic penalty range. Therefore it is incorrect."
+      }
+    },
+    {
+      "question": "Q3",
+      "pipeline": "graph",
+      "input_tokens": 2478,
+      "output_tokens": 143,
+      "answer": "**Lê Minh Thành**  \n- **Tuyên án:** 36 tháng tù (tương đương 3 năm).  \n- **Tội danh:** *mua bán trái phép chất ma túy*.  \n- **Điều luật quy định:** **Điều 251 Bộ luật Hình sự**.  \n- **Khung hình phạt cơ bản:** từ **2 năm** đến **7 năm** tù.",
+      "judge": {
+        "score": 2,
+        "reason": "Câu trả lời trùng khớp đầy đủ với đáp án chuẩn: số tháng tù, tội danh, điều luật và khung hình phạt cơ bản đều được nêu chính xác."
+      }
+    },
+    {
+      "question": "Q4",
+      "pipeline": "flat",
+      "input_tokens": 828,
+      "output_tokens": 78,
+      "answer": "Không đủ thông tin.",
+      "judge": {
+        "score": 0,
+        "reason": "The response does not provide the required information about the offense and the maximum penalty."
+      }
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+Chat model: groq:openai/gpt-oss-20b | Embedding: local:sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | top_k=3 | chunk_size=800 | chunks=176 | KG: 185 nodes / 349 rels
+
+== Indexing (one-off)
+pipeline  calls    in_tok  out_tok       USD  seconds
+flat        176         0        0   0.00000      9.4
+graph       196     39966     3946   0.00418    251.7
+
+== Querying (mean per question)
+pipeline  recall  judge   in_tok  out_tok       USD  seconds
+flat        0.23   0.33      824      313   0.00016     5.44
+graph       0.37   0.83     2382      364   0.00029    16.57
+
+== Per question
+--- Q1 [single-hop-law] flat recall=0.00 judge=0 0.53s
+Không đủ thông tin.
+--- Q1 [single-hop-law] graph recall=0.00 judge=0 19.59s
+Không đủ thông tin.
+--- Q2 [single-hop-news] flat recall=1.00 judge=2 6.15s
+Những bị cáo lãnh án tử hình là **Trần Thanh Tuấn** và **Trần Minh Tâm**.
+--- Q2 [single-hop-news] graph recall=1.00 judge=2 19.60s
+Những bị cáo được TAND TP.HCM tuyên án tử hình trong vụ đường dây mua bán hơn 36 kg ma túy là:
+
+- **Trần Thanh Tuấn** (25 tuổi)  
+- **Trần Minh Tâm** (32 tuổi)
+--- Q3 [cross-kb] flat recall=0.00 judge=0 3.05s
+Không đủ thông tin.
+--- Q3 [cross-kb] graph recall=0.33 judge=2 18.73s
+**Lê Minh Thành**  
+- **Hình phạt:** 36 tháng tù (tương đương 3 năm).  
+- **Tội danh:** *mua bán trái phép chất ma túy*.  
+- **Điều luật quy định:** **Điều 251 Bộ luật Hình sự** (điều 251 BLHS).  
+- **Khung hình phạt cơ bản:** 2 năm – 7 năm tù (điều 251 khoản 1).
+--- Q4 [cross-kb] flat recall=0.00 judge=0 8.85s
+Không đủ thông tin.
+--- Q4 [cross-kb] graph recall=0.67 judge=0 13.24s
+Giang hồ “Hoàng Nato” bị bắt vì **tổ chức sử dụng trái phép chất ma túy** (điều 255 Bộ luật Hình sự).  
+
+Theo Điều 255 BLHS, người phạm tội này bị phạt tù **từ 2 năm đến 7 năm**.  
+Vì vậy, **phạt tù tối đa** mà “Hoàng Nato” có thể bị áp dụng là **7 năm**.
+--- Q5 [cross-kb-multi-hop] flat recall=0.40 judge=0 8.90s
+**Cái Quang Huy bị truy tố về tội gì?**  
+- **Tội**: *Vận chuyển trái phép chất ma túy* (tội vận chuyển ma túy theo Điều 171 Bộ luật Hình sự Việt Nam).
+
+**Loại ma túy liên quan**  
+- **MDMA**: hơn 9,6 kg  
+- **Ketamine**: khoảng 406 g
+
+---
+
+### Khối lượng MDMA và điều luật áp dụng
+
+| Khối lượng MDMA | Điều luật áp dụng | Khung hình phạt (tùy theo mức độ) |
+|-----------------|-------------------|------------------------------------|
+| **> 5 kg** | **Điều 171(1)** – *Vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán, cung cấp, lưu giữ, sản xuất, chế biến, vận chuyển, buôn bán
+--- Q5 [cross-kb-multi-hop] graph recall=0.20 judge=1 20.16s
+**Cái Quang Huy bị truy tố về tội**  
+- **Tội**: *Vận chuyển trái phép chất ma túy* (định nghĩa trong Bộ luật Hình sự Việt Nam, Điều 249 – “Vận chuyển, mang đi, chuyển giao, cung cấp, lưu giữ, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu thụ, sản xuất, chế biến, nhập khẩu, xuất khẩu, buôn bán, giao dịch, chuyển giao, cung cấp, bảo quản, sử dụng, tiêu
+--- Q6 [aggregation] flat recall=0.00 judge=0 5.16s
+Những vụ việc có liên quan đến ma túy MDMA là:
+
+- **Vụ kiện hàng tại Việt Nam (đoạn 2)**: Giám định xác định số viên nén hình tam giác màu hồng‑xám là MDMA, tổng khối lượng hơn 5,3 kg. Đây là trường hợp duy nhất trong ba đoạn được đề cập có chứa chất MDMA.
+--- Q6 [aggregation] graph recall=0.00 judge=0 8.11s
+**Vụ việc liên quan đến ma túy MDMA**
+
+- **Vụ kiện hàng Đức – Huy** (đoạn văn bản [2]):  
+  - Đã xác định có **số viên nén hình tam giác màu hồng‑xám là MDMA, tổng khối lượng hơn 5,3 kg**.  
+  - Đây là trường hợp duy nhất trong các tin tức được nêu mà có chứng cứ về ma túy MDMA.  
+
+Không có thông tin khác trong các đoạn văn bản về các vụ việc khác liên quan đến MDMA.

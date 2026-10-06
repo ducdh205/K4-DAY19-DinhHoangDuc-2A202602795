@@ -1,0 +1,166 @@
+{
+  "scope": "Current graph only; this is not an LLM benchmark",
+  "stats": {
+    "nodes": 388,
+    "relationships": 586
+  },
+  "audits": {
+    "counts": {
+      "cypher": "MATCH (n) RETURN labels(n)[0] AS label, count(*) AS n ORDER BY n DESC",
+      "rows": [
+        {
+          "label": "QuantityThreshold",
+          "n": 221
+        },
+        {
+          "label": "Clause",
+          "n": 99
+        },
+        {
+          "label": "LegalArticle",
+          "n": 18
+        },
+        {
+          "label": "LegalTerm",
+          "n": 14
+        },
+        {
+          "label": "Offence",
+          "n": 13
+        },
+        {
+          "label": "Substance",
+          "n": 9
+        },
+        {
+          "label": "Charge",
+          "n": 5
+        },
+        {
+          "label": "Person",
+          "n": 3
+        },
+        {
+          "label": "NewsArticle",
+          "n": 2
+        },
+        {
+          "label": "Case",
+          "n": 2
+        },
+        {
+          "label": "Location",
+          "n": 2
+        }
+      ]
+    },
+    "missing_bridge": {
+      "cypher": "MATCH (c:Case) WHERE NOT EXISTS {\n        MATCH (c)-[:HAS_CHARGE]->(:Charge)-[:FOR_OFFENCE]->(:Offence)<-[:ESTABLISHES]-(:LegalArticle)\n        } RETURN c.id AS id, c.name AS name, c.doc_id AS doc_id",
+      "rows": []
+    },
+    "duplicate_people": {
+      "cypher": "MATCH (p:Person) WITH p.name AS name, collect(p.id) AS ids,\n        collect(p.doc_id) AS docs WHERE size(ids)>1 RETURN name, ids, docs",
+      "rows": []
+    },
+    "missing_amount": {
+      "cypher": "MATCH (c:Case)-[i:INVOLVES]->(s:Substance)\n        WHERE i.amount_grams IS NULL\n        RETURN c.name AS name, c.doc_id AS doc_id, s.name AS substance, i.amount_raw AS raw",
+      "rows": [
+        {
+          "name": "Vụ Lê Minh Thành",
+          "doc_id": "news-100260918080821054",
+          "substance": "MDMA",
+          "raw": "5 viên"
+        }
+      ]
+    },
+    "missing_sentence_evidence": {
+      "cypher": "MATCH (p:Person)-[:SUBJECT_OF]->(ch:Charge)\n        WHERE ch.stage='verdict' AND coalesce(ch.stage_evidence,'')=''\n        RETURN p.name AS name, ch.doc_id AS doc_id, ch.sentence_text AS sentence",
+      "rows": [
+        {
+          "name": "Trần Thanh Tuấn",
+          "doc_id": "news-100260928173914514",
+          "sentence": "tử hình"
+        },
+        {
+          "name": "Trần Minh Tâm",
+          "doc_id": "news-100260928173914514",
+          "sentence": "tử hình"
+        }
+      ]
+    },
+    "missing_penalty": {
+      "cypher": "MATCH (a:LegalArticle)-[:HAS_CLAUSE]->(cl:Clause)\n        WHERE a.law='BLHS' AND coalesce(cl.penalty_text,'')=''\n        RETURN a.id AS article, cl.number AS clause, cl.text AS text",
+      "rows": [
+        {
+          "article": "blhs-dieu-247",
+          "clause": 4,
+          "text": "4. Người nào phạm tội thuộc khoản 1 Điều này, nhưng đã tự nguyện phá bỏ, giao nộp cho cơ quan chức năng có thẩm quyền trước khi thu hoạch, thì có thể được miễn trách nhiệm hình sự."
+        },
+        {
+          "article": "blhs-dieu-253",
+          "clause": 5,
+          "text": "5. Trường hợp phạm tội có cả tiền chất ở thể rắn và tiền chất ở thể lỏng thì được quy đổi để làm căn cứ truy cứu trách nhiệm hình sự, với tỷ lệ 01 gam tiền chất ở thể rắn tương đương với 1,5 mililít tiền chất ở thể lỏng. Sau khi quy đổi, số lượng tiền chất thuộc khoản nào, thì người thực hiện hành vi phạm tội bị truy cứu trách nhiệm hình sự theo khoản đó."
+        }
+      ]
+    },
+    "mdma_cases": {
+      "cypher": "MATCH (c:Case)-[:INVOLVES]->(:Substance {id:'mdma'})\n        RETURN c.id AS id,c.name AS name,c.doc_id AS doc_id ORDER BY doc_id",
+      "rows": [
+        {
+          "id": "news-100260918080821054:case:1",
+          "name": "Vụ Lê Minh Thành",
+          "doc_id": "news-100260918080821054"
+        }
+      ]
+    }
+  },
+  "context": {
+    "Q1": {
+      "question": "Theo Luật Phòng, chống ma túy 2021, tiền chất là gì?",
+      "facts": [
+        "[pcmt-dieu-2 - Điều 2, khoản 4] Tiền chất là hóa chất không thể thiếu được trong quá trình điều chế, sản xuất chất ma túy được quy định trong danh mục tiền chất do Chính phủ ban hành.",
+        "[pcmt-dieu-2 - Điều 2, khoản 7] Phòng, chống ma túy là phòng ngừa, ngăn chặn, đấu tranh chống tội phạm và tệ nạn ma túy; kiểm soát các hoạt động hợp pháp liên quan đến ma túy."
+      ]
+    },
+    "Q2": {
+      "question": "Trong vụ đường dây mua bán hơn 36kg ma túy bị TAND TP.HCM xét xử ngày 28-9, những bị cáo nào lãnh án tử hình?",
+      "facts": [
+        "(Case: Vụ mua bán hơn 36kg ma túy) -[LOCATED_IN {source_text: TP.HCM}]-> (Location: TP.HCM)"
+      ]
+    },
+    "Q3": {
+      "question": "Lê Minh Thành bị tuyên bao nhiêu tháng tù, về tội gì, và tội đó được quy định tại điều nào của Bộ luật Hình sự với khung hình phạt cơ bản bao nhiêu?",
+      "facts": [
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 1: 1. Người nào mua bán trái phép chất ma túy, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[news-100260918080821054] Vụ việc Vụ Lê Minh Thành: Lê Minh Thành bị tuyên 36 tháng tù.",
+        "[news-100260918080821054] Lê Minh Thành: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 36 tháng tù.",
+        "[news-100260918080821054] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "(Person: Lê Minh Thành) -[SUBJECT_OF]-> (Charge: news-100260918080821054:case:1:charge:lê minh thành:mua bán trái phép chất ma túy)"
+      ]
+    },
+    "Q4": {
+      "question": "Giang hồ 'Hoàng Nato' bị bắt về hành vi gì, và hành vi đó có thể bị phạt tù tối đa bao nhiêu theo Bộ luật Hình sự?",
+      "facts": []
+    },
+    "Q5": {
+      "question": "Cái Quang Huy bị truy tố về tội gì với loại ma túy nào? Với khối lượng MDMA trong vụ này, khoản nào của điều luật tương ứng được áp dụng và khung hình phạt là gì?",
+      "facts": [
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 1: 1. Người nào mua bán trái phép chất ma túy, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[news-100260918080821054] Vụ việc Vụ Lê Minh Thành: Lê Minh Thành bị tuyên 36 tháng tù.",
+        "[news-100260918080821054] Lê Minh Thành: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 36 tháng tù.",
+        "[news-100260918080821054] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "(Case: Vụ Lê Minh Thành) -[INVOLVES {evidence: 5 viên, amount_raw: 5 viên, substance_source_name: MDMA}]-> (Substance: MDMA)"
+      ]
+    },
+    "Q6": {
+      "question": "Những vụ việc nào trong tin tức có liên quan đến ma túy MDMA?",
+      "facts": [
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 1: 1. Người nào mua bán trái phép chất ma túy, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[news-100260918080821054] Vụ việc Vụ Lê Minh Thành: Lê Minh Thành bị tuyên 36 tháng tù.",
+        "[news-100260918080821054] Lê Minh Thành: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 36 tháng tù.",
+        "[news-100260918080821054] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "(Case: Vụ Lê Minh Thành) -[INVOLVES {evidence: 5 viên, amount_raw: 5 viên, substance_source_name: MDMA}]-> (Substance: MDMA)"
+      ]
+    }
+  }
+}

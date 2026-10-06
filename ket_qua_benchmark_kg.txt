@@ -1,0 +1,72 @@
+Chat model: groq:openai/gpt-oss-20b | Embedding: local:sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 | top_k=3 | chunk_size=800 | chunks=176 | KG: 469 nodes / 715 rels
+
+== Indexing (one-off)
+pipeline  calls    in_tok  out_tok       USD  seconds
+flat        176         0        0   0.00000     12.4
+graph       196     39966     4040   0.00421    276.4
+
+== Querying (mean per question)
+pipeline  recall  judge   in_tok  out_tok       USD  seconds
+flat        0.23   0.50      824      315   0.00016     8.15
+graph       0.71   1.67     2346      197   0.00024    16.06
+
+== Per question
+--- Q1 [single-hop-law] flat recall=0.00 judge=0 4.15s
+Không đủ thông tin.
+--- Q1 [single-hop-law] graph recall=1.00 judge=2 12.46s
+Tiền chất là **hóa chất không thể thiếu được trong quá trình điều chế, sản xuất chất ma túy** và được quy định trong danh mục tiền chất do Chính phủ ban hành.
+--- Q2 [single-hop-news] flat recall=1.00 judge=2 10.30s
+Những bị cáo lãnh án tử hình là **Trần Thanh Tuấn** và **Trần Minh Tâm**.
+--- Q2 [single-hop-news] graph recall=1.00 judge=2 19.63s
+Trong vụ đường dây mua bán hơn 36 kg ma túy được TAND TP.HCM xét xử ngày 28‑9, **hai bị cáo** bị lãnh án tử hình là:
+
+1. **Trần Thanh Tuấn** (25 tuổi)  
+2. **Trần Minh Tâm** (32 tuổi)
+--- Q3 [cross-kb] flat recall=0.00 judge=0 9.82s
+Không đủ thông tin.
+--- Q3 [cross-kb] graph recall=0.00 judge=2 18.73s
+**Lê Minh Thành**  
+- **Mức án:** 36 tháng tù.  
+- **Tội danh:** *mua bán trái phép chất ma túy*.  
+- **Điều luật quy định:** **Điều 251 Bộ luật Hình sự**.  
+- **Khung hình phạt cơ bản:** 2 năm – 7 năm tù.
+--- Q4 [cross-kb] flat recall=0.00 judge=0 4.52s
+Không đủ thông tin.
+--- Q4 [cross-kb] graph recall=1.00 judge=2 16.97s
+**Giang hồ “Hoàng Nato” bị bắt vì**  
+- **Tội tổ chức sử dụng trái phép chất ma túy** (Điều 255 Bộ luật Hình sự).
+
+**Phạt tù tối đa theo Bộ luật Hình sự**  
+- Theo **Điều 255, khoản 4**: “Phạm tội thuộc một trong các trường hợp sau đây, thì bị phạt tù 20 năm hoặc tù chung thân”.  
+- Do “Hoàng Nato” bị buộc tội **tổ chức sử dụng trái phép chất ma túy** (điều 255), mức án tối đa là **20 năm tù** (hoặc tù chung thân nếu có các trường hợp nặng hơn được quy định trong khoản 4).
+--- Q5 [cross-kb-multi-hop] flat recall=0.40 judge=1 7.71s
+**Cái Quang Huy bị truy tố về tội gì?**  
+- **Tội**: Vận chuyển trái phép chất ma túy (đặc biệt là ma túy MDMA và Ketamine) từ Cộng hòa Liên bang Đức sang Việt Nam qua sân bay Nội Bài.  
+- **Loại ma túy**:  
+  - **MDMA**: hơn 9,6 kg  
+  - **Ketamine**: khoảng 406 g  
+
+**Khoản điều luật áp dụng**  
+- **Điều 10** của **Luật ố 15/2019/QH14 (Luật về chất ma túy)** – “Vận chuyển, nhập khẩu, xuất khẩu, buôn bán, lưu giữ, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất, chế biến, vận chuyển, lưu giữ, buôn bán, sử dụng, sản xuất,
+--- Q5 [cross-kb-multi-hop] graph recall=0.60 judge=2 18.18s
+**Cái Quang Huy bị truy tố về tội gì với loại ma túy nào?**  
+- **Tội:** *vận chuyển trái phép chất ma túy* (Điều 250 Bộ luật Hình sự).  
+- **Loại ma túy:** *MDMA* (cùng với Ketamine, nhưng câu hỏi chỉ yêu cầu về MDMA).
+
+**Với khối lượng MDMA trong vụ này, khoản nào của điều luật tương ứng được áp dụng và khung hình phạt là gì?**  
+- **Khối lượng MDMA:** 9 600 g (9,6 kg).  
+- **Khoản áp dụng:** **Khoản 4** của Điều 250 BLHS (đối với các chất như MDMA có khối lượng ≥ 100 g).  
+- **Khung hình phạt:** *phạt tù 20 năm, tù chung thân hoặc tử hình*.
+--- Q6 [aggregation] flat recall=0.00 judge=0 12.41s
+Những vụ việc có liên quan đến ma túy MDMA là:
+
+- **Vụ kiện hàng tại Việt Nam (đoạn 2)**: Giám định xác định số viên nén hình tam giác màu hồng‑xám là MDMA, tổng khối lượng hơn 5,3 kg. Đây là trường hợp duy nhất trong ba đoạn được đề cập có chứa chất MDMA.
+--- Q6 [aggregation] graph recall=0.67 judge=0 10.41s
+**Các vụ việc trong tin tức có liên quan đến ma túy MDMA**
+
+| Tên người / đối tượng | Tội danh / hành vi | Giai đoạn | Mức án (nếu có) |
+|-----------------------|--------------------|-----------|-----------------|
+| **Cái Quang Huy** | Vận chuyển trái phép chất ma túy (MDMA) | Arrested | Chưa có dữ kiện tuyên án |
+| **Nguyễn Tiến Đạt** | Vận chuyển trái phép chất ma túy (MDMA) | Arrested | Chưa có dữ kiện tuyên án |
+
+> **Lưu ý**: Các vụ việc khác trong đoạn văn bản (ví dụ: vụ “tiệc” ma túy ở Sầm Sơn, các hành vi sai phạm tại Viện Pháp y tâm thần Trung ương, v.v.) không được ghi nhận trong dữ kiện knowledge graph và do đó không được xác định là liên quan đến MDMA. Nếu cần thông tin chi tiết hơn về mức án hoặc các tình tiết khác, cần có dữ kiện bổ sung.

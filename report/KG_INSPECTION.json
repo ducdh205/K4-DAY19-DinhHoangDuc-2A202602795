@@ -1,0 +1,392 @@
+{
+  "scope": "Current graph only; this is not an LLM benchmark",
+  "inspected_at": "2026-10-06T03:51:25.812059+00:00",
+  "stats": {
+    "nodes": 469,
+    "relationships": 715
+  },
+  "audits": {
+    "missing_doc_id": {
+      "cypher": "MATCH (n) WHERE n.doc_id IS NULL OR n.doc_id='' RETURN labels(n) AS labels, n.id AS id",
+      "rows": []
+    },
+    "counts": {
+      "cypher": "MATCH (n) RETURN labels(n)[0] AS label, count(*) AS n ORDER BY n DESC",
+      "rows": [
+        {
+          "label": "QuantityThreshold",
+          "n": 221
+        },
+        {
+          "label": "Clause",
+          "n": 99
+        },
+        {
+          "label": "Charge",
+          "n": 45
+        },
+        {
+          "label": "Person",
+          "n": 31
+        },
+        {
+          "label": "LegalArticle",
+          "n": 18
+        },
+        {
+          "label": "LegalTerm",
+          "n": 14
+        },
+        {
+          "label": "Offence",
+          "n": 13
+        },
+        {
+          "label": "Substance",
+          "n": 10
+        },
+        {
+          "label": "Case",
+          "n": 8
+        },
+        {
+          "label": "NewsArticle",
+          "n": 7
+        },
+        {
+          "label": "Location",
+          "n": 3
+        }
+      ]
+    },
+    "relationship_counts": {
+      "cypher": "MATCH ()-[r]->() RETURN type(r) AS relationship, count(*) AS n ORDER BY n DESC",
+      "rows": [
+        {
+          "relationship": "HAS_THRESHOLD",
+          "n": 221
+        },
+        {
+          "relationship": "FOR_SUBSTANCE",
+          "n": 221
+        },
+        {
+          "relationship": "HAS_CLAUSE",
+          "n": 99
+        },
+        {
+          "relationship": "HAS_CHARGE",
+          "n": 45
+        },
+        {
+          "relationship": "FOR_OFFENCE",
+          "n": 45
+        },
+        {
+          "relationship": "SUBJECT_OF",
+          "n": 31
+        },
+        {
+          "relationship": "DEFINES_TERM",
+          "n": 14
+        },
+        {
+          "relationship": "ESTABLISHES",
+          "n": 13
+        },
+        {
+          "relationship": "INVOLVES",
+          "n": 10
+        },
+        {
+          "relationship": "REPORTS",
+          "n": 8
+        },
+        {
+          "relationship": "LOCATED_IN",
+          "n": 8
+        }
+      ]
+    },
+    "missing_bridge": {
+      "cypher": "MATCH (c:Case) WHERE NOT EXISTS {\n        MATCH (c)-[:HAS_CHARGE]->(:Charge)-[:FOR_OFFENCE]->(:Offence)<-[:ESTABLISHES]-(:LegalArticle)\n        } RETURN c.id AS id, c.name AS name, c.doc_id AS doc_id",
+      "rows": []
+    },
+    "duplicate_people": {
+      "cypher": "MATCH (p:Person) WITH p.name AS name, collect(p.id) AS ids,\n        collect(p.doc_id) AS docs WHERE size(ids)>1 RETURN name, ids, docs",
+      "rows": [
+        {
+          "name": "Nguyễn Tiến Đạt",
+          "ids": [
+            "news-100260917203001265:case:1:person:nguyễn tiến đạt",
+            "news-100260917203001265:case:2:person:nguyễn tiến đạt"
+          ],
+          "docs": [
+            "news-100260917203001265",
+            "news-100260917203001265"
+          ]
+        },
+        {
+          "name": "Dương Minh Tuấn",
+          "ids": [
+            "news-100260920221957595:case:1:person:dương minh tuấn",
+            "news-100260922111804786:case:1:person:dương minh tuấn"
+          ],
+          "docs": [
+            "news-100260920221957595",
+            "news-100260922111804786"
+          ]
+        }
+      ]
+    },
+    "missing_amount": {
+      "cypher": "MATCH (c:Case)-[i:INVOLVES]->(s:Substance)\n        WHERE i.amount_grams IS NULL\n        RETURN c.name AS name, c.doc_id AS doc_id, s.name AS substance, i.amount_raw AS raw",
+      "rows": [
+        {
+          "name": "Vụ mua bán ma túy tại Hà Nội",
+          "doc_id": "news-100260918080821054",
+          "substance": "MDMA",
+          "raw": "5 viên"
+        },
+        {
+          "name": "Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy",
+          "doc_id": "news-100260920221957595",
+          "substance": "Ketamine",
+          "raw": "không xác định"
+        },
+        {
+          "name": "Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy",
+          "doc_id": "news-100260920221957595",
+          "substance": "MDMA",
+          "raw": "không xác định"
+        },
+        {
+          "name": "Vụ trốn viện và sử dụng ma túy tại Viện Pháp y tâm thần Trung ương",
+          "doc_id": "news-100260930085028036",
+          "substance": "Ketamine",
+          "raw": "có"
+        },
+        {
+          "name": "Vụ trốn viện và sử dụng ma túy tại Viện Pháp y tâm thần Trung ương",
+          "doc_id": "news-100260930085028036",
+          "substance": "Methamphetamine",
+          "raw": "ba bộ tẩu"
+        },
+        {
+          "name": "Vụ trốn viện và sử dụng ma túy tại Viện Pháp y tâm thần Trung ương",
+          "doc_id": "news-100260930085028036",
+          "substance": "cần sa",
+          "raw": "có"
+        }
+      ]
+    },
+    "missing_sentence_evidence": {
+      "cypher": "MATCH (p:Person)-[:SUBJECT_OF]->(ch:Charge)\n        WHERE ch.stage='verdict' AND coalesce(ch.stage_evidence,'')=''\n        RETURN p.name AS name, ch.doc_id AS doc_id, ch.sentence_text AS sentence",
+      "rows": []
+    },
+    "missing_penalty": {
+      "cypher": "MATCH (a:LegalArticle)-[:HAS_CLAUSE]->(cl:Clause)\n        WHERE a.law='BLHS' AND coalesce(cl.penalty_text,'')=''\n        RETURN a.id AS article, cl.number AS clause, cl.text AS text",
+      "rows": [
+        {
+          "article": "blhs-dieu-253",
+          "clause": 5,
+          "text": "5. Trường hợp phạm tội có cả tiền chất ở thể rắn và tiền chất ở thể lỏng thì được quy đổi để làm căn cứ truy cứu trách nhiệm hình sự, với tỷ lệ 01 gam tiền chất ở thể rắn tương đương với 1,5 mililít tiền chất ở thể lỏng. Sau khi quy đổi, số lượng tiền chất thuộc khoản nào, thì người thực hiện hành vi phạm tội bị truy cứu trách nhiệm hình sự theo khoản đó."
+        },
+        {
+          "article": "blhs-dieu-247",
+          "clause": 4,
+          "text": "4. Người nào phạm tội thuộc khoản 1 Điều này, nhưng đã tự nguyện phá bỏ, giao nộp cho cơ quan chức năng có thẩm quyền trước khi thu hoạch, thì có thể được miễn trách nhiệm hình sự."
+        }
+      ]
+    },
+    "mdma_cases": {
+      "cypher": "MATCH (c:Case)-[:INVOLVES]->(:Substance {id:'mdma'})\n        RETURN c.id AS id,c.name AS name,c.doc_id AS doc_id ORDER BY doc_id",
+      "rows": [
+        {
+          "id": "news-100260917203001265:case:2",
+          "name": "Vụ vận chuyển ma túy của Nguyễn Tiến Đạt",
+          "doc_id": "news-100260917203001265"
+        },
+        {
+          "id": "news-100260917203001265:case:1",
+          "name": "Vụ vận chuyển ma túy của Cái Quang Huy",
+          "doc_id": "news-100260917203001265"
+        },
+        {
+          "id": "news-100260918080821054:case:1",
+          "name": "Vụ mua bán ma túy tại Hà Nội",
+          "doc_id": "news-100260918080821054"
+        },
+        {
+          "id": "news-100260920221957595:case:1",
+          "name": "Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy",
+          "doc_id": "news-100260920221957595"
+        },
+        {
+          "id": "news-100260930085028036:case:1",
+          "name": "Vụ trốn viện và sử dụng ma túy tại Viện Pháp y tâm thần Trung ương",
+          "doc_id": "news-100260930085028036"
+        }
+      ]
+    },
+    "mdma_threshold_match": {
+      "cypher": "MATCH (p:Person {name:'Cái Quang Huy'})-[:SUBJECT_OF]->(ch:Charge)\n        <-[:HAS_CHARGE]-(c:Case)-[i:INVOLVES]->(s:Substance {id:'mdma'}),\n        (ch)-[:FOR_OFFENCE]->(:Offence)<-[:ESTABLISHES]-(a:LegalArticle)\n        -[:HAS_CLAUSE]->(cl:Clause)-[:HAS_THRESHOLD]->(t:QuantityThreshold)-[:FOR_SUBSTANCE]->(s)\n        WHERE i.amount_grams>=t.lower_grams AND (t.upper_grams IS NULL OR i.amount_grams<t.upper_grams)\n        RETURN p.name AS person, a.number AS article, cl.number AS clause,\n               i.amount_grams AS grams, t.lower_grams AS lower_grams, cl.penalty_text AS penalty",
+      "rows": [
+        {
+          "person": "Cái Quang Huy",
+          "article": 250,
+          "clause": 4,
+          "grams": 9600.0,
+          "lower_grams": 100.0,
+          "penalty": "phạt tù 20 năm, tù chung thân hoặc tử hình"
+        }
+      ]
+    },
+    "verdict_people": {
+      "cypher": "MATCH (p:Person)-[:SUBJECT_OF]->(ch:Charge)\n        WHERE ch.stage='verdict' AND ch.sentence_text CONTAINS 'tử hình'\n        RETURN p.name AS person, ch.stage AS stage, ch.sentence_text AS sentence, ch.doc_id AS doc_id",
+      "rows": [
+        {
+          "person": "Trần Thanh Tuấn",
+          "stage": "verdict",
+          "sentence": "tử hình",
+          "doc_id": "news-100260928173914514"
+        },
+        {
+          "person": "Trần Minh Tâm",
+          "stage": "verdict",
+          "sentence": "tử hình",
+          "doc_id": "news-100260928173914514"
+        }
+      ]
+    }
+  },
+  "context": {
+    "Q1": {
+      "question": "Theo Luật Phòng, chống ma túy 2021, tiền chất là gì?",
+      "facts": [
+        "[pcmt-dieu-2 - Điều 2, khoản 4] Tiền chất là hóa chất không thể thiếu được trong quá trình điều chế, sản xuất chất ma túy được quy định trong danh mục tiền chất do Chính phủ ban hành.",
+        "[pcmt-dieu-2 - Điều 2, khoản 7] Phòng, chống ma túy là phòng ngừa, ngăn chặn, đấu tranh chống tội phạm và tệ nạn ma túy; kiểm soát các hoạt động hợp pháp liên quan đến ma túy."
+      ]
+    },
+    "Q2": {
+      "question": "Trong vụ đường dây mua bán hơn 36kg ma túy bị TAND TP.HCM xét xử ngày 28-9, những bị cáo nào lãnh án tử hình?",
+      "facts": [
+        "(Case: Mua bán hơn 36kg ma túy, hai bị cáo lãnh án tử hình) -[LOCATED_IN {source_text: TP.HCM}]-> (Location: TP.HCM)",
+        "(Case: Vụ sử dụng pod chill chứa etomidate của TikToker Phannhibeauty và Hoàng Nato) -[LOCATED_IN {source_text: TP.HCM}]-> (Location: TP.HCM)",
+        "(Case: Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy) -[LOCATED_IN {source_text: TP.HCM}]-> (Location: TP.HCM)",
+        "(Case: Vụ bắt TikToker Phannhibeauty và giang hồ Hoàng Nato) -[LOCATED_IN {source_text: TP.HCM}]-> (Location: TP.HCM)"
+      ]
+    },
+    "Q3": {
+      "question": "Lê Minh Thành bị tuyên bao nhiêu tháng tù, về tội gì, và tội đó được quy định tại điều nào của Bộ luật Hình sự với khung hình phạt cơ bản bao nhiêu?",
+      "facts": [
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 1: 1. Người nào mua bán trái phép chất ma túy, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[news-100260918080821054] Vụ việc Vụ mua bán ma túy tại Hà Nội: Ba thanh niên góp tiền để Lê Minh Thành mua ma túy, nhưng sau đó không tiếp tục sử dụng. Tòa sơ thẩm xác định ba người là đồng phạm và tuyên mỗi người 2 năm tù về tội mua bán trái phép chất ma túy.",
+        "[news-100260918080821054] Kim Xuân Tuấn: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 24 tháng tù.",
+        "[news-100260918080821054] Lê Minh Thành: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 36 tháng tù.",
+        "[news-100260918080821054] Nguyễn Quang Hưng: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 24 tháng tù.",
+        "[news-100260918080821054] Trịnh Vũ Kiên: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 24 tháng tù.",
+        "[news-100260918080821054] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "(Person: Lê Minh Thành) -[SUBJECT_OF]-> (Charge: news-100260918080821054:case:1:charge:lê minh thành:mua bán trái phép chất ma túy)"
+      ]
+    },
+    "Q4": {
+      "question": "Giang hồ 'Hoàng Nato' bị bắt về hành vi gì, và hành vi đó có thể bị phạt tù tối đa bao nhiêu theo Bộ luật Hình sự?",
+      "facts": [
+        "[blhs-dieu-249 - Điều 249 BLHS: Tội tàng trữ trái phép chất ma túy] khoản 1: phạt tù từ 01 năm đến 05 năm",
+        "[blhs-dieu-249 - Điều 249 BLHS: Tội tàng trữ trái phép chất ma túy] khoản 4: phạt tù từ 15 năm đến 20 năm hoặc tù chung thân",
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 1: 1. Người nào mua bán trái phép chất ma túy, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 4: phạt tù 20 năm, tù chung thân hoặc tử hình",
+        "[blhs-dieu-255 - Điều 255 BLHS: Tội tổ chức sử dụng trái phép chất ma túy] khoản 1: 1. Người nào tổ chức sử dụng trái phép chất ma túy dưới bất kỳ hình thức nào, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[blhs-dieu-255 - Điều 255 BLHS: Tội tổ chức sử dụng trái phép chất ma túy] khoản 4: 4. Phạm tội thuộc một trong các trường hợp sau đây, thì bị phạt tù 20 năm hoặc tù chung thân:\n\na) Gây tổn hại cho sức khỏe của 02 người trở lên mà tỷ lệ tổn thương cơ thể của mỗi người 61% trở lên;\n\nb) Làm chết 02 người trở lên.",
+        "[news-100260920221957595] Vụ việc Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy: Công an TP.HCM triệt phá 8 đường dây ma túy, bắt giữ 126 người, trong đó có 9 người nước ngoài, bao gồm 'Hoàng Nato' – Dương Minh Tuấn, người bị buộc tội tổ chức sử dụng trái phép chất ma túy.",
+        "[news-100260920221957595] Dương Minh Tuấn: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Giang Quốc Khánh: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Kim Yu Young: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Lê Đăng Khoa: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Nguyễn Hoàng Khả Ái: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Nguyễn Thành Quốc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Phạm Minh Sang: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Phạm Phương Anh: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Phạm Tài Vình: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Vụ việc: tội danh/hành vi tàng trữ trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Vụ việc: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260922111804786] Vụ việc Vụ bắt TikToker Phannhibeauty và giang hồ Hoàng Nato: TikToker Phannhibeauty (Phan Kim Nhi) và giang hồ Hoàng Nato (Dương Minh Tuấn) bị bắt vì tổ chức sử dụng trái phép chất ma túy trong chuyên án của Công an TP.HCM.",
+        "[news-100260922111804786] Dương Minh Tuấn: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260922111804786] Phan Kim Nhi: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260922111804786] Vụ việc: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "(Person: Dương Minh Tuấn) -[SUBJECT_OF]-> (Charge: news-100260920221957595:case:1:charge:dương minh tuấn:tổ chức sử dụng trái phép chất ma túy)",
+        "(Person: Dương Minh Tuấn) -[SUBJECT_OF]-> (Charge: news-100260922111804786:case:1:charge:dương minh tuấn:tổ chức sử dụng trái phép chất ma túy)"
+      ]
+    },
+    "Q5": {
+      "question": "Cái Quang Huy bị truy tố về tội gì với loại ma túy nào? Với khối lượng MDMA trong vụ này, khoản nào của điều luật tương ứng được áp dụng và khung hình phạt là gì?",
+      "facts": [
+        "[blhs-dieu-250 - Điều 250 BLHS: Tội vận chuyển trái phép chất ma túy] khoản 1: phạt tù từ 02 năm đến 07 năm\nc) Heroine, Cocaine, Methamphetamine, Amphetamine, MDMA hoặc XLR-11 có khối lượng từ 0,1 gam đến dưới 05 gam;",
+        "[blhs-dieu-250 - Điều 250 BLHS: Tội vận chuyển trái phép chất ma túy] khoản 4: phạt tù 20 năm, tù chung thân hoặc tử hình\nb) Heroine, Cocaine, Methamphetamine, Amphetamine, MDMA hoặc XLR-11 có khối lượng 100 gam trở lên;",
+        "[news-100260917203001265] Vụ việc Vụ vận chuyển ma túy của Cái Quang Huy: Cái Quang Huy bị cáo buộc hai lần vận chuyển MDMA và Ketamine từ Đức về Việt Nam qua sân bay Nội Bài.",
+        "[news-100260917203001265] Cái Quang Huy: tội danh/hành vi vận chuyển trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260917203001265] Nguyễn Tiến Đạt: tội danh/hành vi vận chuyển trái phép chất ma túy; giai đoạn investigated; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260917203001265] Vụ việc: tội danh/hành vi vận chuyển trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "(Case: Vụ mua bán ma túy tại Hà Nội) -[INVOLVES {evidence: 5 viên, amount_raw: 5 viên, substance_source_name: MDMA}]-> (Substance: MDMA)",
+        "(Case: Vụ vận chuyển ma túy của Nguyễn Tiến Đạt) -[INVOLVES {amount_value: 4.3, unit: kg, evidence: 4,3kg, amount_raw: 4,3kg, substance_source_name: MDMA, amount_grams: 4300.0}]-> (Substance: MDMA)",
+        "(Case: Vụ trốn viện và sử dụng ma túy tại Viện Pháp y tâm thần Trung ương) -[INVOLVES {amount_value: 0.686, unit: g, evidence: 0,686g, amount_raw: 0,686g, substance_source_name: MDMA, amount_grams: 0.686}]-> (Substance: MDMA)",
+        "(Case: Vụ vận chuyển ma túy của Cái Quang Huy) -[INVOLVES {amount_value: 9.6, unit: kg, evidence: 9,6kg, amount_raw: 9,6kg, substance_source_name: MDMA, amount_grams: 9600.0}]-> (Substance: MDMA)",
+        "(Case: Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy) -[INVOLVES {evidence: không xác định, amount_raw: không xác định, substance_source_name: thuốc lắc}]-> (Substance: MDMA)",
+        "(Person: Cái Quang Huy) -[SUBJECT_OF]-> (Charge: news-100260917203001265:case:1:charge:cái quang huy:vận chuyển trái phép chất ma túy)"
+      ]
+    },
+    "Q6": {
+      "question": "Những vụ việc nào trong tin tức có liên quan đến ma túy MDMA?",
+      "facts": [
+        "[blhs-dieu-249 - Điều 249 BLHS: Tội tàng trữ trái phép chất ma túy] khoản 1: phạt tù từ 01 năm đến 05 năm\nc) Heroine, Cocaine, Methamphetamine, Amphetamine, MDMA hoặc XLR-11 có khối lượng từ 0,1 gam đến dưới 05 gam;",
+        "[blhs-dieu-249 - Điều 249 BLHS: Tội tàng trữ trái phép chất ma túy] khoản 4: phạt tù từ 15 năm đến 20 năm hoặc tù chung thân\nb) Heroine, Cocaine, Methamphetamine, Amphetamine, MDMA hoặc XLR-11 có khối lượng 100 gam trở lên;",
+        "[blhs-dieu-250 - Điều 250 BLHS: Tội vận chuyển trái phép chất ma túy] khoản 1: phạt tù từ 02 năm đến 07 năm\nc) Heroine, Cocaine, Methamphetamine, Amphetamine, MDMA hoặc XLR-11 có khối lượng từ 0,1 gam đến dưới 05 gam;",
+        "[blhs-dieu-250 - Điều 250 BLHS: Tội vận chuyển trái phép chất ma túy] khoản 4: phạt tù 20 năm, tù chung thân hoặc tử hình\nb) Heroine, Cocaine, Methamphetamine, Amphetamine, MDMA hoặc XLR-11 có khối lượng 100 gam trở lên;",
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 1: 1. Người nào mua bán trái phép chất ma túy, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[blhs-dieu-251 - Điều 251 BLHS: Tội mua bán trái phép chất ma túy] khoản 4: phạt tù 20 năm, tù chung thân hoặc tử hình\nb) Heroine, Cocaine, Methamphetamine, Amphetamine, MDMA hoặc XLR-11 có khối lượng 100 gam trở lên;",
+        "[blhs-dieu-255 - Điều 255 BLHS: Tội tổ chức sử dụng trái phép chất ma túy] khoản 1: 1. Người nào tổ chức sử dụng trái phép chất ma túy dưới bất kỳ hình thức nào, thì bị phạt tù từ 02 năm đến 07 năm.",
+        "[news-100260917203001265] Vụ việc Vụ vận chuyển ma túy của Cái Quang Huy: Cái Quang Huy bị cáo buộc hai lần vận chuyển MDMA và Ketamine từ Đức về Việt Nam qua sân bay Nội Bài.",
+        "[news-100260917203001265] Cái Quang Huy: tội danh/hành vi vận chuyển trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260917203001265] Nguyễn Tiến Đạt: tội danh/hành vi vận chuyển trái phép chất ma túy; giai đoạn investigated; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260917203001265] Vụ việc: tội danh/hành vi vận chuyển trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260917203001265] Vụ việc Vụ vận chuyển ma túy của Nguyễn Tiến Đạt: Nguyễn Tiến Đạt bị bắt giữ vì nhận hai kiện hàng chứa MDMA từ Huy.",
+        "[news-100260917203001265] Nguyễn Tiến Đạt: tội danh/hành vi vận chuyển trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260918080821054] Vụ việc Vụ mua bán ma túy tại Hà Nội: Ba thanh niên góp tiền để Lê Minh Thành mua ma túy, nhưng sau đó không tiếp tục sử dụng. Tòa sơ thẩm xác định ba người là đồng phạm và tuyên mỗi người 2 năm tù về tội mua bán trái phép chất ma túy.",
+        "[news-100260918080821054] Kim Xuân Tuấn: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 24 tháng tù.",
+        "[news-100260918080821054] Lê Minh Thành: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 36 tháng tù.",
+        "[news-100260918080821054] Nguyễn Quang Hưng: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 24 tháng tù.",
+        "[news-100260918080821054] Trịnh Vũ Kiên: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn verdict; mức án theo báo 24 tháng tù.",
+        "[news-100260918080821054] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Vụ việc Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy: Công an TP.HCM triệt phá 8 đường dây ma túy, bắt giữ 126 người, trong đó có 9 người nước ngoài, bao gồm 'Hoàng Nato' – Dương Minh Tuấn, người bị buộc tội tổ chức sử dụng trái phép chất ma túy.",
+        "[news-100260920221957595] Dương Minh Tuấn: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Giang Quốc Khánh: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Kim Yu Young: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Lê Đăng Khoa: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Nguyễn Hoàng Khả Ái: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Nguyễn Thành Quốc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Phạm Minh Sang: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Phạm Phương Anh: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Phạm Tài Vình: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn arrested; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Vụ việc: tội danh/hành vi tàng trữ trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260920221957595] Vụ việc: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Vụ việc Vụ trốn viện và sử dụng ma túy tại Viện Pháp y tâm thần Trung ương: Bệnh nhân Lê Văn Đông trốn viện, tổ chức và sử dụng ma túy trên bãi biển Sầm Sơn cùng đồng nghiệp, đồng thời mang ma túy vào phòng bệnh viện.",
+        "[news-100260930085028036] Cao Thị Bích Hằng: tội danh/hành vi tàng trữ trái phép chất ma túy; giai đoạn tried; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Lê Văn Đông: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn tried; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Nguyễn Thị Mai Anh: tội danh/hành vi tàng trữ trái phép chất ma túy; giai đoạn tried; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Ngô Việt Dũng: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn tried; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Trần Quốc An: tội danh/hành vi tàng trữ trái phép chất ma túy; giai đoạn tried; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Vụ việc: tội danh/hành vi mua bán trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Vụ việc: tội danh/hành vi tàng trữ trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "[news-100260930085028036] Vụ việc: tội danh/hành vi tổ chức sử dụng trái phép chất ma túy; giai đoạn reported; mức án theo báo chưa có dữ kiện tuyên án.",
+        "(Case: Vụ mua bán ma túy tại Hà Nội) -[INVOLVES {evidence: 5 viên, amount_raw: 5 viên, substance_source_name: MDMA}]-> (Substance: MDMA)",
+        "(Case: Vụ vận chuyển ma túy của Nguyễn Tiến Đạt) -[INVOLVES {amount_value: 4.3, unit: kg, evidence: 4,3kg, amount_raw: 4,3kg, substance_source_name: MDMA, amount_grams: 4300.0}]-> (Substance: MDMA)",
+        "(Case: Vụ trốn viện và sử dụng ma túy tại Viện Pháp y tâm thần Trung ương) -[INVOLVES {amount_value: 0.686, unit: g, evidence: 0,686g, amount_raw: 0,686g, substance_source_name: MDMA, amount_grams: 0.686}]-> (Substance: MDMA)",
+        "(Case: Vụ vận chuyển ma túy của Cái Quang Huy) -[INVOLVES {amount_value: 9.6, unit: kg, evidence: 9,6kg, amount_raw: 9,6kg, substance_source_name: MDMA, amount_grams: 9600.0}]-> (Substance: MDMA)",
+        "(Case: Vụ bắt giang hồ 'Hoàng Nato' và 126 người liên quan 8 đường dây ma túy) -[INVOLVES {evidence: không xác định, amount_raw: không xác định, substance_source_name: thuốc lắc}]-> (Substance: MDMA)"
+      ]
+    }
+  }
+}
